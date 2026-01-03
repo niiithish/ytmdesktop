@@ -177,7 +177,7 @@ if (props.isMainWindow) {
 }
 
 .title-text {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Geist", sans-serif;
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;

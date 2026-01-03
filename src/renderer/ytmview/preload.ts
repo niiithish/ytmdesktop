@@ -82,6 +82,39 @@ function createStyleSheet() {
       .ytmd-player-bar-control.sleep-timer-button.active {
         color: #FFFFFF;
       }
+
+      /* Floating Settings Button */
+      .ytmd-floating-settings {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 9999;
+      }
+
+      .ytmd-settings-button {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .ytmd-settings-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.08);
+      }
+
+      .ytmd-settings-button > .material-symbols-outlined {
+        font-size: 22px;
+      }
     `)
   );
   document.head.appendChild(css);
@@ -154,6 +187,32 @@ function createKeyboardNavigation() {
     ipcRenderer.send("ytmView:switchFocus", "main");
   };
   document.body.appendChild(keyboardNavigation);
+}
+
+function createFloatingSettingsButton() {
+  // Create container
+  const container = document.createElement("div");
+  container.classList.add("ytmd-floating-settings");
+
+  // Create button
+  const button = document.createElement("button");
+  button.classList.add("ytmd-settings-button");
+  button.title = "Settings";
+
+  // Create icon
+  const icon = document.createElement("span");
+  icon.classList.add("material-symbols-outlined");
+  icon.innerText = "settings";
+
+  button.appendChild(icon);
+  container.appendChild(button);
+
+  // Add click handler
+  button.addEventListener("click", () => {
+    ipcRenderer.send("settingsWindow:open");
+  });
+
+  document.body.appendChild(container);
 }
 
 async function createAdditionalPlayerBarControls() {
@@ -298,6 +357,7 @@ window.addEventListener("load", async () => {
   createStyleSheet();
   createNavigationMenuArrows();
   createKeyboardNavigation();
+  createFloatingSettingsButton();
   await createAdditionalPlayerBarControls();
   await hideChromecastButton();
   await hookPlayerApiEvents();
